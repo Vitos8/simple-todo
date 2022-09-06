@@ -1,24 +1,64 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { TodoType } from './models';
+import CompletedTasks from "./components/CompletedTasks/CompletedTasks";
+import Tasks from "./components/Tasks/Tasks";
 
-function App() {
+
+const App: React.FC = () => {
+  const [todos, setTodos] = React.useState<TodoType[]>([]);
+  const [inputValue, setInputValue] = React.useState<string>('');
+
+  let addTodo = () => {
+
+    if(inputValue?.length === 0) return alert('You must type at least one letter !'); 
+
+    let todo:TodoType = {
+        text: inputValue,
+        completed: false,
+        id: todos.length + 1,
+    }
+        
+    setTodos((prev) => [ todo, ...prev]);
+    setInputValue('');        
+  }
+
+  let onCompleted = (id:number) => {
+    let newTodosList = todos.map(item => {
+      if (item.id === id) {
+        item.completed = !item.completed
+        return item;
+      }
+      return item;
+    })
+    setTodos(newTodosList);
+  }
+
+  let onClose = (id:number) => {
+    let newTodosList = todos.filter(item => item.id !== id);
+    setTodos(newTodosList);
+  }
+
+  let onKeyDown = (e:React.KeyboardEvent) => {
+    if (e.keyCode === 13) {
+        addTodo();
+    }
+};
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-slate-200 h-full pt-10">
+      <div className="bg-slate-400 max-w-[900px] h-[550px] rounded-xl mx-auto overflow-y-scroll">
+        <h1 className='text-center text-[40px] pt-5 pb-5 text-white font-bold'>TypeScript TodoList tutorial</h1>
+        <div className="flex justify-center pb-5">
+          <input onKeyDown={(e) => onKeyDown(e)} value={inputValue} onChange={( e) => setInputValue(e.target.value)}  type="text" className='bg-slate-600 rounded-md p-2 w-[300px] text-white text-center' placeholder='Type your todo here !' />
+          <button onClick={addTodo} className='bg-indigo-500 text-white ml-1  px-2 rounded-md hover:opacity-[0.7] active:opacity-[1] transition-all '>Add task </button>
+        </div>
+        <div className="px-10">
+            <Tasks todos={todos} onCompleted={onCompleted} onClose={onClose}/>
+            {todos.length > 0 ? 
+            <CompletedTasks onCompleted={onCompleted} todos={todos} onClose={onClose} /> 
+            : null}
+        </div>
+      </div>
     </div>
   );
 }
