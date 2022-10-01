@@ -3,7 +3,6 @@ import { TodosProps } from '../../models'
 
 const Tasks:React.FC<TodosProps> = ({todos, onCompleted, onClose}) => {
      
-
      return (
           <div className='mb-5'>
                <h2 className='text-center font-bold text-xl text-purple-900 mb-3'>Tasks</h2>
