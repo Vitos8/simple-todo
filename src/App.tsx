@@ -3,10 +3,10 @@ import { TodoType } from './models';
 import CompletedTasks from "./components/CompletedTasks/CompletedTasks";
 import Tasks from "./components/Tasks/Tasks";
 
-
-const App: React.FC = () => {
+const App: React.FC =() => {
   const [todos, setTodos] = React.useState<TodoType[]>([]);
   const [inputValue, setInputValue] = React.useState<string>('');
+  const [todoId, setTodoId] = React.useState<number>(1);
 
   let addTodo = () => {
 
@@ -15,15 +15,16 @@ const App: React.FC = () => {
     let todo:TodoType = {
         text: inputValue,
         completed: false,
-        id: todos.length + 1,
+        id: todoId,
     }
-        
-    setTodos((prev) => [ todo, ...prev]);
-    setInputValue('');        
+    
+    setTodoId((prev:number) => prev + 1);
+    setTodos((prev:TodoType[]) => [ todo, ...prev]);
+    setInputValue('');            
   }
 
   let onCompleted = (id:number) => {
-    let newTodosList = todos.map(item => {
+    let newTodosList = todos.map((item:TodoType) => {
       if (item.id === id) {
         item.completed = !item.completed
         return item;
@@ -34,7 +35,7 @@ const App: React.FC = () => {
   }
 
   let onClose = (id:number) => {
-    let newTodosList = todos.filter(item => item.id !== id);
+    let newTodosList = todos.filter((item:TodoType) => item.id !== id);
     setTodos(newTodosList);
   }
 
