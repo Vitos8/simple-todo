@@ -20,9 +20,7 @@ const App: React.FC =() => {
     
     setTodoId((prev:number) => prev + 1);
     setTodos((prev:TodoType[]) => [ todo, ...prev]);
-    setInputValue('');        
-    console.log(todo);
-    
+    setInputValue('');            
   }
 
   let onCompleted = (id:number) => {
